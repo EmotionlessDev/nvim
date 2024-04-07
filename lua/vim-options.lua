@@ -19,5 +19,5 @@ vim.cmd("set backspace=indent,eol,start")
 vim.cmd("set clipboard=unnamed")
 vim.cmd("set wrap")
 vim.cmd("set guicursor=n-v-c-i:blok")
-vim.g.mapleader = " "
-
+vim.g.mapleader = ' '
+vim.diagnostic.config {signs=false}
