@@ -1,7 +1,7 @@
 vim.cmd("set autoindent")
 vim.cmd("set autoread")
 vim.cmd("set cin")
-vim.cmd("set expandtab")
+vim.cmd("set noexpandtab")
 vim.cmd("set hlsearch")
 vim.cmd("set ignorecase")
 vim.cmd("set incsearch")
