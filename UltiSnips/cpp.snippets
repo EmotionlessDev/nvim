@@ -1,0 +1,52 @@
+snippet beg "template"
+#ifdef ONPC
+    #define _GLIBCXX_DEBUG
+#endif
+#include <bits/stdc++.h>
+
+using namespace std;
+/// Pragmas ///
+/// define ///
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define V vector
+#define MP make_pair
+#define vi vector<int>
+#define ff first
+#define ss second
+#define vl vector<long long>
+/// typedef ///
+typedef long long ll;
+typedef long double ld;
+typedef unsigned long long ull;
+
+/// solve ///
+
+void solve() {
+	$0
+}
+
+signed main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    int t = 1;
+    //cin >> t;
+    #ifdef ONPC
+        std::cout << std::unitbuf; 
+    #endif
+    while (t--)
+        solve();
+    #ifdef ONPC
+        cout << endl << "__________________________" << endl;
+    #endif
+    #ifdef ONPC
+        cout << endl << "finished in " << clock() * 1.0 / CLOCKS_PER_SEC << " sec" << endl;
+        cerr << endl << "finished in " << clock() * 1.0 / CLOCKS_PER_SEC << " sec" << endl;
+    #endif
+  return 0;
+}
+endsnippet
+

@@ -1,75 +1,100 @@
 return {
-    {
-        "hrsh7th/cmp-nvim-lsp",
-        lazy = false,
-    },
-    {
-        "L3MON4D3/LuaSnip",
-        lazy = false,
-        dependencies = {
-            "saadparwaiz1/cmp_luasnip",
-            "rafamadriz/friendly-snippets",
-        },
-    },
-    {
-        "hrsh7th/nvim-cmp",
-        lazy = false,
-        event = { "InsertEnter", "CmdlineEnter" },
+	{
+		"hrsh7th/cmp-nvim-lsp",
+		lazy = false,
+	},
+	{
+		-- "L3MON4D3/LuaSnip",
+		"SirVer/ultisnips",
+		lazy = false,
+		dependencies = {
+			"honza/vim-snippets",
+			"lervag/vimtex",
+			"quangnguyen30192/cmp-nvim-ultisnips",
+			-- "saadparwaiz1/cmp_luasnip",
+			-- "rafamadriz/friendly-snippets",
+		},
+		config = function()
+			vim.g.UltiSnipsExpandTrigger = "<tab>"
+			vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
+			vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
+			vim.g.UltiSnipsSnippetDirectories = {
+				vim.env.HOME .. "/.config/nvim/UltiSnips/cp",
+				vim.env.HOME .. "/.config/nvim/UltiSnips/tex",
+				vim.env.HOME .. "/.config/nvim/UltiSnips/py",
+			}
+		end,
+	},
+	{
+		"hrsh7th/nvim-cmp",
+		lazy = false,
+		-- event = { "InsertEnter", "CmdlineEnter" },
 
-        config = function()
-            require("luasnip.loaders.from_vscode").lazy_load()
-            -- Set up nvim-cmp.
-            local has_words_before = function()
-                unpack = unpack or table.unpack
-                local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-                return col ~= 0
-                    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-            end
-            local luasnip = require("luasnip")
-            local cmp = require("cmp")
-            cmp.setup({
-                snippet = {
-                    expand = function(args)
-                        require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
-                    end,
-                },
-                window = {
-                    completion = cmp.config.window.bordered(),
-                    documentation = cmp.config.window.bordered(),
-                },
-                mapping = cmp.mapping.preset.insert({
-                    ["<Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-                            -- that way you will only jump inside the snippet region
-                        elseif luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
-                        elseif has_words_before() then
-                            cmp.complete()
-                        else
-                            fallback()
-                        end
-                    end, { "i", "s" }),
-
-                    ["<S-Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.jumpable(-1) then
-                            luasnip.jump(-1)
-                        else
-                            fallback()
-                        end
-                    end, { "i", "s" }),
-                    ["<CR>"] = cmp.mapping.confirm({ select = true }),
-                }),
-                sources = cmp.config.sources({
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" }, -- For luasnip users.
-                }, {
-                    { name = "buffer" },
-                }),
-            })
-        end,
-    },
+		config = function()
+			-- require("luasnip.loaders.from_vscode").lazy_load()
+			-- Set up nvim-cmp.
+			-- local luasnip = require("luasnip")
+			local cmp = require("cmp")
+			local t = function(str)
+				return vim.api.nvim_replace_termcodes(str, true, true, true)
+			end
+			cmp.setup({
+				snippet = {
+					expand = function(args)
+						vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+						-- require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+					end,
+				},
+				window = {
+					completion = cmp.config.window.bordered(),
+					documentation = cmp.config.window.bordered(),
+				},
+				mapping = {
+					["<leader><Tab>"] = cmp.mapping({
+						c = function()
+							if cmp.visible() then
+								cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+							else
+								cmp.complete()
+							end
+						end,
+						i = function(fallback)
+							if cmp.visible() then
+								cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+							elseif vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
+								vim.api.nvim_feedkeys(t("<Plug>(ultisnips_jump_forward)"), "m", true)
+							else
+								fallback()
+							end
+						end,
+						s = function(fallback)
+							if vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
+								vim.api.nvim_feedkeys(t("<Plug>(ultisnips_jump_forward)"), "m", true)
+							else
+								fallback()
+							end
+						end,
+					}),
+					["<CR>"] = cmp.mapping({
+						i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+							else
+								fallback()
+							end
+						end,
+					}),
+					-- ... Your other configuration ...
+				},
+				sources = cmp.config.sources({
+					{ name = "nvim_lsp" },
+					-- { name = "luasnip" }, -- For luasnip users.
+					{ name = "ultisnips" }, -- For ultisnips users.
+				}, {
+					{ name = "buffer" },
+				}),
+			})
+		end,
+	},
 }
