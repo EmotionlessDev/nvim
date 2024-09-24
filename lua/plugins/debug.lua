@@ -10,15 +10,40 @@ return {
 		local dapui = require("dapui")
 		require("dapui").setup()
 		require("dap-python").setup("~/.virtualenvs/debugpy/bin/python")
-		dap.adapters.lldb = {
-			type = "executable",
-			command = "/opt/homebrew/bin/lldb-vscode", -- adjust as needed, must be absolute path
-			name = "lldb",
+		-- dap.adapters.lldb = {
+		-- 	type = "executable",
+		-- 	command = "/opt/homebrew/bin/lldb-vscode", -- adjust as needed, must be absolute path
+		-- 	name = "lldb",
+		-- }
+		-- dap.configurations.cpp = {
+		-- 	{
+		-- 		name = "Launch",
+		-- 		type = "lldb",
+		-- 		request = "launch",
+		-- 		program = function()
+		-- 			return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+		-- 		end,
+		-- 		cwd = "${workspaceFolder}",
+		-- 		stopOnEntry = false,
+		-- 		args = {},
+		-- 	},
+		-- }
+		-- Настройка для codelldb, установленного через Mason
+		dap.adapters.codelldb = {
+			type = 'server',
+			port = "${port}",
+			executable = {
+				-- Путь к codelldb, установленному через Mason
+				command = vim.fn.stdpath("data") .. '/mason/bin/codelldb',
+				args = { "--port", "${port}" },
+			}
 		}
+
+		-- Конфигурации для C++
 		dap.configurations.cpp = {
 			{
 				name = "Launch",
-				type = "lldb",
+				type = "codelldb",
 				request = "launch",
 				program = function()
 					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
@@ -26,6 +51,7 @@ return {
 				cwd = "${workspaceFolder}",
 				stopOnEntry = false,
 				args = {},
+				runInTerminal = false,
 			},
 		}
 

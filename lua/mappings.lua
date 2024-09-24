@@ -6,6 +6,8 @@ function run_command()
 end
 
 -- nnoremap <space><F3> :w<CR>:!pdflatex %<CR>
+
+vim.api.nvim_set_keymap('n', '<F1>', ':!python3 %<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader><F3>', ':!pdflatex %<CR>', {noremap = true})
 vim.api.nvim_set_keymap('i', '<C-f>', '<cmd>lua run_command()<CR>', {noremap = true})
 function latex_edit()

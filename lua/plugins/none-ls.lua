@@ -9,7 +9,8 @@ return {
 			sources = {
 				-- require("none-ls.formatting.stylua"),
 				require("none-ls.formatting.latexindent"),
-				null_ls.builtins.formatting.stylua,
+				-- null_ls.builtins.formatting.stylua,
+				null_ls.builtins.formatting.pyink,
 				--null_ls.builtins.formatting.latexindent,
 				--null_ls.builtins.formatting.clang_format,
 			},
