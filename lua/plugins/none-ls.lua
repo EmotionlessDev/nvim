@@ -12,12 +12,13 @@ return {
 				require("none-ls.diagnostics.flake8"),
 				-- null_ls.builtins.formatting.stylua,
 				-- null_ls.builtins.formatting.pyink,
-    		null_ls.builtins.formatting.black,
+				null_ls.builtins.formatting.black,
 				-- null_ls.builtins.diagnostics.flake8,
 				--null_ls.builtins.formatting.latexindent,
 				--null_ls.builtins.formatting.clang_format,
 			},
 		})
 		vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
+		vim.keymap.set('n', '<leader>ge', vim.diagnostic.open_float, { noremap = true, silent = true })
 	end,
 }
