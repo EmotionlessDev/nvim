@@ -10,6 +10,7 @@ return {
 				-- require("none-ls.formatting.stylua"),
 				require("none-ls.formatting.latexindent"),
 				require("none-ls.diagnostics.flake8"),
+    		null_ls.builtins.diagnostics.mypy,
 				-- null_ls.builtins.formatting.stylua,
 				-- null_ls.builtins.formatting.pyink,
 				null_ls.builtins.formatting.black,
